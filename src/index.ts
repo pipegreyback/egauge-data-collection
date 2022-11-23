@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import config from "../config/environment";
+import cron from "node-cron";
 
 const supabase = createClient(config.BASE_URL, config.API_KEY);
 
@@ -30,4 +31,7 @@ const main = async () => {
   saveDataInStorage(payload);
 };
 
-main();
+cron.schedule("0 */4 * * *", () => {
+  console.log(`Running the task at ${new Date().toISOString()}`);
+  main();
+});
